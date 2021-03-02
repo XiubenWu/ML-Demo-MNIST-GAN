@@ -320,6 +320,8 @@ def train_cgan_new(generator, discriminator, data_loader, show_data_loader, n_ep
                 )
             if batches_done % 1000 == 0:
                 for i_show, (show_imgs, show_labels) in enumerate(show_data_loader):
+                    if show_imgs.shape[0] < 10:
+                        continue
                     index_list = []
                     for j in range(10):
                         index = (show_labels == j).nonzero()
