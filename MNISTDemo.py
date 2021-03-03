@@ -30,7 +30,7 @@ parser.add_argument("--img_size", type=int, default=32, help="size of each image
 parser.add_argument("--channels", type=int, default=1, help="number of image channels")
 parser.add_argument("--sample_interval", type=int, default=400, help="interval betwen image samples")
 parser.add_argument("--Gchannels", type=int, default=128, help="start_channels_for_G")
-parser.add_argument("--n_classes", type=int, default=5, help="num of class of data (labels)")
+parser.add_argument("--n_classes", type=int, default=10, help="num of class of data (labels)")
 opt = parser.parse_args()
 print(opt)
 img_shape = (opt.channels, opt.img_size, opt.img_size)
@@ -58,16 +58,7 @@ def cgan_demo():
     discriminator = Module.DiscriminatorCGAN(opt.n_classes, img_shape)
 
     Function.train_cgan(generator, discriminator, data_loader, opt.n_epochs, opt.lr, opt.b1, opt.b2,
-                        opt.latent_dim, opt.n_classes, cuda, fist_train=False)
-
-
-def cdcgan_demo():
-    generator = Module.GeneratorCDCGAN(opt.latent_dim, opt.n_classes, img_shape)  # latent_dim should be 20
-    discriminator = Module.DiscriminatorCDCGAN(opt.n_classes, img_shape, opt.latent_dim)
-
-    Function.train_cdcgan(generator, discriminator, data_loader, opt.n_epochs, opt.lr, opt.b1, opt.b2,
-                          opt.latent_dim, opt.n_classes, cuda,
-                          fist_train=True)
+                        opt.latent_dim, opt.n_classes, cuda, fist_train=True)
 
 
 def cgan_new_demo():
@@ -86,26 +77,16 @@ def cgan_new_demo():
     generator = Module.GeneratorCGANNew(img_shape)
     discriminator = Module.DiscriminatorCGANNew(img_shape)
 
-    Function.train_cgan_new(generator, discriminator, data_loader,show_data_loader, opt.n_epochs, opt.lr, opt.b1, opt.b2,
+    Function.train_cgan_new(generator, discriminator, data_loader, show_data_loader, opt.n_epochs, opt.lr, opt.b1,
+                            opt.b2,
                             cuda, first_train=True)
 
 
-def dcwcgan_demo():
-    generator = Module.GeneratorDCWCGAN(opt.latent_dim, opt.n_classes, img_shape)  # latent_dim should be 100
-    discriminator = Module.DiscriminatorDCWCGAN(opt.n_classes, img_shape)
-
-    Function.train_dcwcgan(generator, discriminator, data_loader, opt.n_epochs, opt.lr, opt.b1, opt.b2,
-                           opt.latent_dim, opt.n_classes, cuda,
-                           fist_train=True)
-
-
 def main():
-    mode = 3
+    mode = 0
     if mode == 0:
         cgan_demo()
     elif mode == 1:
-        cdcgan_demo()
-    elif mode == 3:
         cgan_new_demo()
     else:
         print("mode error")
